@@ -76,7 +76,15 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                         break
 
                 if self.black_listed(host):
-                    print(f"BLOCKED: Access to {host} is forbidden")
+                    print(f"BLOCKED: {host}")
+                    response = (
+                            "HTTP/1.1 403 Forbidden\r\n"
+                            "Content-Length: 0\r\n"
+                            "Connection: close\r\n"
+                            "\r\n"
+                                )
+                    self.request.sendall(response.encode("utf-8"))
+                    self.request.close()
                     return
 
                 if host:
@@ -155,10 +163,8 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
 
 
 
-    def tunnel_data(self, client_socket, server_socket, passed_data=b''):
+    def tunnel_data(self, client_socket, server_socket):
         sockets = [client_socket, server_socket]
-        if passed_data:
-            server_socket.sendall(passed_data)
         print(f"client: {client_socket}, server: {server_socket}")
         while True:
             try:
