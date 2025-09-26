@@ -9,6 +9,8 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         
         request_data = self.request.recv(8192).decode("utf-8")
+        
+        
         if not request_data:
             return
         
@@ -53,7 +55,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 url2 = urlparse(url)
             url3 = url2.hostname
             print(url3)
-            if host in url3 or host.endswith('.' + url3):
+            if host == url3 or host.endswith('.' + url3):
                 return True
         return False 
 
@@ -76,8 +78,6 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                     else:
                         client_socket.sendall(data)
                 
-                
-
             except Exception as e:
                 print(f"Error: {e}")
                 break

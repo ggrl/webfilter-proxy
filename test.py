@@ -24,7 +24,7 @@ while True:
             #print(url2.hostname)
         url3 = url2.hostname#.split('.')[-2] + "." + url2.hostname.split('.')[-1]
         print(url3)
-        if host in url3 or host.endswith('.' + url3):
+        if host == url3 or host.endswith('.' + url3):
             x = 1
             break
     if x == 0:
