@@ -13,25 +13,19 @@ while True:
     print(f"Client connected: {client_address}")
     
     
-    request = client_socket.recv(4096).decode()
-    print("2")
+    host = client_socket.recv(4096).decode()
+    print(f"request: {host}")
+    #host = request.split(' ')[1].strip()
     
-    
-    host = None
-    for line in request.split('\n'):
-        if line.startswith('Host:'):
-            host = line.split(' ')[1].strip()
-            break
+    request = f"GET / HTTP/1.1\r\nHost: {host}\r\nUser-Agent: python-client\r\n\r\n"
     
     if host:
         target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         target_socket.connect((host, 80))
         target_socket.send(request.encode())
-        
         response = target_socket.recv(4096)
         
         client_socket.send(response)
-        
         target_socket.close()
     
     client_socket.close()
