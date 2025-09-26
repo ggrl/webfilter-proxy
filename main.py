@@ -85,7 +85,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 if host:
                     target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     target_socket.connect((host, 80))
-                    self.tunnel_data(self.request, target_socket, full_request)
+                    self.http_request(self.request, target_socket, full_request)
                 else:
                     print("No host header found")
                     return
@@ -116,7 +116,34 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
             if host == url3 or host.endswith('.' + url3):
                 return True
         return False 
+    
+    
+    def http_request(self, client_socket, server_socket, full_request):
+        try:
+            # Send the request once
+            server_socket.sendall(full_request)
 
+            # Read the response
+            response = b""
+            while True:
+                chunk = server_socket.recv(4096)
+                if not chunk:
+                    break
+                response += chunk
+                # Optional: stop early if Content-Length is reached or chunked end detected
+
+            # Send response back to client
+            client_socket.sendall(response)
+
+        except Exception as e:
+            print(f"HTTP request error: {e}")
+
+        finally:
+            try:
+                client_socket.close()
+                server_socket.close()
+            except:
+                pass
 
     def tunnel_data(self, client_socket, server_socket, passed_data=b''):
         sockets = [client_socket, server_socket]
