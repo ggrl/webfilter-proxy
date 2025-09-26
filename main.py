@@ -8,9 +8,16 @@ from urllib.parse import urlparse
 class ProxyRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         
-        request_data = self.request.recv(8192).decode("utf-8")
-        
-        
+        #request_data = self.request.recv(8192).decode("utf-8")
+        request_data_bin = b""
+        while True:
+            chunk = self.request.recv(4096)
+            if not chunk:
+                return
+            request_data_bin += chunk
+            if b"\r\n\r\n" in request_data_bin:
+                break
+        request_data = request_data_bin.decode("UTF-8")
         if not request_data:
             return
         
@@ -30,8 +37,8 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
         if host:
             target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             target_socket.connect((host, 80))
-            target_socket.send(request_data.encode())
-            self.tunnel_data(self.request, target_socket)
+            #target_socket.send(request_data.encode())
+            self.tunnel_data(self.request, target_socket, request_data_bin)
             
         else:
             print("no host")    
@@ -60,8 +67,10 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
         return False 
 
 
-    def tunnel_data(self, client_socket, server_socket):
+    def tunnel_data(self, client_socket, server_socket, passed_data=b''):
         sockets = [client_socket, server_socket]
+        if passed_data:
+            server_socket.sendall(passed_data)
         print(f"client: {client_socket}, server: {server_socket}")
         while True:
             try:
