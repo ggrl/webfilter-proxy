@@ -25,7 +25,6 @@ while True:
             break
     
     
-    #request = f"GET / HTTP/1.1\r\nHost: {host}\r\nUser-Agent: python-client\r\n\r\n"
     
     if host:
         target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
