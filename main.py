@@ -126,10 +126,12 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 blocked_page_template = f.read()
         blocked_page = blocked_page_template.replace("{host}", host)
         response = (
-                "HTTP/1.1 302 Found\r\n"
-                "Location: http://127.0.0.1:5000/blocked.html" + host + "\r\n"
+                "HTTP/1.1 403 Forbidden\r\n"
+                "Content-Type: text/html\r\n"
+                f"Content-Length: {len(blocked_page.encode('utf-8'))}\r\n"
                 "Connection: close\r\n"
                 "\r\n"
+        f"{blocked_page}"
                 )
         self.request.sendall(response.encode("utf-8"))
         self.request.close()
