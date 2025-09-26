@@ -24,6 +24,30 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
         print(f"request: {request_data}")
         if not request_data:
             return
+        # --- HTTPS CONNECT handling ---
+        if first_line.startswith("CONNECT"):
+                host_port = first_line.split(" ")[1]
+                if ":" in host_port:
+                    host, port = host_port.split(":")
+                    port = int(port)
+                else:
+                        ost, port = host_port, 443
+
+                if self.black_listed(host):
+                    print(f"BLOCKED HTTPS: {host}")
+                    return
+
+                try:
+                    target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    target_socket.connect((host, port))
+                    self.request.sendall(b"HTTP/1.1 200 Connection established\r\n\r\n")
+                    self.tunnel_data(self.request, target_socket)
+                except Exception as e:
+                        print(f"HTTPS tunnel error: {e}")
+                return  # tunnel takes over, so stop loop        
+        
+        
+        
         host = None
         for line in request_data.splitlines():
             if line.lower().startswith("host:"):
