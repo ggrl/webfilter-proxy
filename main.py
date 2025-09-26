@@ -22,10 +22,8 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
             target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             target_socket.connect((host, 80))
             target_socket.send(request_data.encode())
-            #response = target_socket.recv(4096)
             self.tunnel_data(self.request, target_socket)
-            self.request.send(response)
-            #target_socket.close()
+            
         else:
             print("no host")    
         
