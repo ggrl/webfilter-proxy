@@ -7,30 +7,27 @@ from urllib.parse import urlparse
 
 class ProxyRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        while True:  # loop until client disconnects
             try:
-                # --- Read request headers ---
+                
                 request_data_bin = b""
                 while True:
                     chunk = self.request.recv(4096)
                     if not chunk:
-                        return  # client closed connection
+                        return  
                     request_data_bin += chunk
                     if b"\r\n\r\n" in request_data_bin:
                         break
 
-                # --- Split headers and maybe partial body ---
+                
                 header_part, _, body_part = request_data_bin.partition(b"\r\n\r\n")
                 headers = header_part.decode("utf-8", errors="ignore").splitlines()
-
-                # --- Check for Content-Length ---
                 content_length = 0
                 for line in headers:
                     if line.lower().startswith("content-length:"):
                         content_length = int(line.split(":", 1)[1].strip())
                         break
 
-                # --- Read full body if needed ---
+                
                 remaining = content_length - len(body_part)
                 while remaining > 0:
                     chunk = self.request.recv(min(4096, remaining))
@@ -39,17 +36,17 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                     body_part += chunk
                     remaining -= len(chunk)
 
-                # --- Rebuild full request ---
+                
                 full_request = header_part + b"\r\n\r\n" + body_part
                 request_text = full_request.decode("utf-8", errors="ignore")
                 if not request_text:
                     return
 
-                # --- First request line ---
+                
                 first_line = request_text.splitlines()[0]
                 print(f"Request line: {first_line}")
 
-                # --- HTTPS CONNECT handling ---
+                #HTTPS handling
                 if first_line.startswith("CONNECT"):
                     host_port = first_line.split(" ")[1]
                     if ":" in host_port:
@@ -69,9 +66,9 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                         self.tunnel_data(self.request, target_socket)
                     except Exception as e:
                         print(f"HTTPS tunnel error: {e}")
-                    return  # tunnel takes over, so stop loop
+                    return  
 
-                # --- Extract Host header ---
+                
                 host = None
                 for line in request_text.splitlines():
                     if line.lower().startswith("host:"):
@@ -96,6 +93,9 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 print(f"Error in handle loop: {e}")
                 return
 
+
+
+
     def black_listed(self, host):
         blacklist = ("facebook.com", "x.com", "httpbin.org")
         if host.startswith("http://"):
@@ -117,22 +117,24 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 return True
         return False 
     
+
+
+
+
+
+
+
+
     
     def http_request(self, client_socket, server_socket, full_request):
         try:
-            # Send the request once
             server_socket.sendall(full_request)
-
-            # Read the response
             response = b""
             while True:
                 chunk = server_socket.recv(4096)
                 if not chunk:
                     break
                 response += chunk
-                # Optional: stop early if Content-Length is reached or chunked end detected
-
-            # Send response back to client
             client_socket.sendall(response)
 
         except Exception as e:
@@ -144,6 +146,14 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 server_socket.close()
             except:
                 pass
+
+
+
+
+
+
+
+
 
     def tunnel_data(self, client_socket, server_socket, passed_data=b''):
         sockets = [client_socket, server_socket]
@@ -173,6 +183,14 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
             server_socket.close()
         except:
             print("No sockets open")            
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     HOST, PORT = "127.0.0.1", 8080
