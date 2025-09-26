@@ -7,43 +7,94 @@ from urllib.parse import urlparse
 
 class ProxyRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        
-        #request_data = self.request.recv(8192).decode("utf-8")
-        request_data_bin = b""
-        while True:
-            chunk = self.request.recv(4096)
-            if not chunk:
+        while True:  # loop until client disconnects
+            try:
+                # --- Read request headers ---
+                request_data_bin = b""
+                while True:
+                    chunk = self.request.recv(4096)
+                    if not chunk:
+                        return  # client closed connection
+                    request_data_bin += chunk
+                    if b"\r\n\r\n" in request_data_bin:
+                        break
+
+                # --- Split headers and maybe partial body ---
+                header_part, _, body_part = request_data_bin.partition(b"\r\n\r\n")
+                headers = header_part.decode("utf-8", errors="ignore").splitlines()
+
+                # --- Check for Content-Length ---
+                content_length = 0
+                for line in headers:
+                    if line.lower().startswith("content-length:"):
+                        content_length = int(line.split(":", 1)[1].strip())
+                        break
+
+                # --- Read full body if needed ---
+                remaining = content_length - len(body_part)
+                while remaining > 0:
+                    chunk = self.request.recv(min(4096, remaining))
+                    if not chunk:
+                        break
+                    body_part += chunk
+                    remaining -= len(chunk)
+
+                # --- Rebuild full request ---
+                full_request = header_part + b"\r\n\r\n" + body_part
+                request_text = full_request.decode("utf-8", errors="ignore")
+                if not request_text:
+                    return
+
+                # --- First request line ---
+                first_line = request_text.splitlines()[0]
+                print(f"Request line: {first_line}")
+
+                # --- HTTPS CONNECT handling ---
+                if first_line.startswith("CONNECT"):
+                    host_port = first_line.split(" ")[1]
+                    if ":" in host_port:
+                        host, port = host_port.split(":")
+                        port = int(port)
+                    else:
+                        host, port = host_port, 443
+
+                    if self.black_listed(host):
+                        print(f"BLOCKED HTTPS: {host}")
+                        return
+
+                    try:
+                        target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        target_socket.connect((host, port))
+                        self.request.sendall(b"HTTP/1.1 200 Connection established\r\n\r\n")
+                        self.tunnel_data(self.request, target_socket)
+                    except Exception as e:
+                        print(f"HTTPS tunnel error: {e}")
+                    return  # tunnel takes over, so stop loop
+
+                # --- Extract Host header ---
+                host = None
+                for line in request_text.splitlines():
+                    if line.lower().startswith("host:"):
+                        host = line.split(":", 1)[1].strip()
+                        break
+
+                if self.black_listed(host):
+                    print(f"BLOCKED: Access to {host} is forbidden")
+                    return
+
+                if host:
+                    target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    target_socket.connect((host, 80))
+                    self.tunnel_data(self.request, target_socket, full_request)
+                else:
+                    print("No host header found")
+                    return
+
+                print("Response returned (ready for next request if any)")
+
+            except Exception as e:
+                print(f"Error in handle loop: {e}")
                 return
-            request_data_bin += chunk
-            if b"\r\n\r\n" in request_data_bin:
-                break
-        request_data = request_data_bin.decode("UTF-8")
-        if not request_data:
-            return
-        
-        print(f"request: {request_data}")
-        if not request_data:
-            return
-        host = None
-        for line in request_data.splitlines():
-            if line.lower().startswith("host:"):
-                host = line.split(":", 1)[1].strip()
-                break
-        if self.black_listed(host):
-            print(f"BLOCKED: Access to {host} is forbidden")
-            
-            return
-             
-        if host:
-            target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            target_socket.connect((host, 80))
-            #target_socket.send(request_data.encode())
-            self.tunnel_data(self.request, target_socket, request_data_bin)
-            
-        else:
-            print("no host")    
-        
-        print("response returned")
 
     def black_listed(self, host):
         blacklist = ("facebook.com", "x.com", "httpbin.org")
@@ -52,7 +103,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
         else:
             host = "//" + host
             host = urlparse(host).hostname
-        print(host)
+        #print(host)
         for url in blacklist:
             x = 0
             if url.startswith("http://"):
@@ -61,7 +112,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 url = "//" + url
                 url2 = urlparse(url)
             url3 = url2.hostname
-            print(url3)
+            #print(url3)
             if host == url3 or host.endswith('.' + url3):
                 return True
         return False 
