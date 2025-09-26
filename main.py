@@ -15,7 +15,7 @@ while True:
     
     host = client_socket.recv(4096).decode()
     print(f"request: {host}")
-    #host = request.split(' ')[1].strip()
+    
     
     request = f"GET / HTTP/1.1\r\nHost: {host}\r\nUser-Agent: python-client\r\n\r\n"
     
