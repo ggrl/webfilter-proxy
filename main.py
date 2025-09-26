@@ -56,7 +56,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                         host, port = host_port, 443
 
                     if self.black_listed(host):
-                        print(f"BLOCKED HTTPS: {host}")
+                        self.block_page(host)
                         return
 
                     try:
@@ -76,16 +76,9 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                         break
 
                 if self.black_listed(host):
-                    print(f"BLOCKED: {host}")
-                    response = (
-                            "HTTP/1.1 403 Forbidden\r\n"
-                            "Content-Length: 0\r\n"
-                            "Connection: close\r\n"
-                            "\r\n"
-                                )
-                    self.request.sendall(response.encode("utf-8"))
-                    self.request.close()
+                    self.block_page(host)
                     return
+                    
 
                 if host:
                     target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -127,8 +120,20 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
     
 
 
-
-
+    def block_page(self, host):
+        print(f"BLOCKED: {host}")
+        with open("data/blocked.html", "r", encoding="utf-8") as f:
+                blocked_page_template = f.read()
+        blocked_page = blocked_page_template.replace("{host}", host)
+        response = (
+                "HTTP/1.1 302 Found\r\n"
+                "Location: http://127.0.0.1:5000/blocked.html" + host + "\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                )
+        self.request.sendall(response.encode("utf-8"))
+        self.request.close()
+        return
 
 
 
@@ -194,11 +199,8 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
 
 
 
-
-
-
-
 if __name__ == "__main__":
+    
     HOST, PORT = "127.0.0.1", 8080
     socketserver.ThreadingTCPServer.allow_reuse_address = True
     server = socketserver.ThreadingTCPServer((HOST, PORT), ProxyRequestHandler)
