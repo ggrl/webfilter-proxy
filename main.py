@@ -3,6 +3,8 @@ import select
 import socket
 from urllib.parse import urlparse
 
+
+
 class ProxyRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         
@@ -14,10 +16,15 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
         if not request_data:
             return
         host = None
-        for line in request_data.split('\n'):
-            if line.startswith('Host:'):
-                host = line.split(' ')[1].strip()
+        for line in request_data.splitlines():
+            if line.lower().startswith("host:"):
+                host = line.split(":", 1)[1].strip()
                 break
+        if self.black_listed(host):
+            print(f"BLOCKED: Access to {host} is forbidden")
+            
+            return
+             
         if host:
             target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             target_socket.connect((host, 80))
@@ -29,11 +36,27 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
         
         print("response returned")
 
-        # YOUR CODE HERE:
-        # 1. Parse the request to get the destination host and port.
-        # 2. Connect to the destination server in a new socket.
-        # 3. Send the initial request_data to that server.
-        # 4. Call self.tunnel_data() to handle the rest of the communication.
+    def black_listed(self, host):
+        blacklist = ("facebook.com", "x.com", "httpbin.org")
+        if host.startswith("http://"):
+            host = urlparse(host).hostname
+        else:
+            host = "//" + host
+            host = urlparse(host).hostname
+        print(host)
+        for url in blacklist:
+            x = 0
+            if url.startswith("http://"):
+                url2 = urlparse(url)
+            else:
+                url = "//" + url
+                url2 = urlparse(url)
+            url3 = url2.hostname
+            print(url3)
+            if host in url3 or host.endswith('.' + url3):
+                return True
+        return False 
+
 
     def tunnel_data(self, client_socket, server_socket):
         sockets = [client_socket, server_socket]
@@ -53,17 +76,16 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                     else:
                         client_socket.sendall(data)
                 
-                # YOUR CODE HERE:
-                # Loop through the readable sockets. For each socket, receive the
-                # data. If the data came from the client, send it to the server.
-                # If it came from the server, send it to the client.
-                # If you receive no data, the connection is closed, so you should exit.
+                
 
             except Exception as e:
                 print(f"Error: {e}")
                 break
-        client_socket.close()
-        server_socket.close()        
+        try:
+            client_socket.close()
+            server_socket.close()
+        except:
+            print("No sockets open")            
 
 if __name__ == "__main__":
     HOST, PORT = "127.0.0.1", 8080
