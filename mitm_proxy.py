@@ -13,8 +13,8 @@ import datetime
 import time
 import json
 
-CA_CERT_FILE = "ca_cert.pem"   
-CA_KEY_FILE = "ca_key.pem"    
+CA_CERT_FILE = "temporary_demo_cert.pem"  #Demo-cert create new one and insert here 
+CA_KEY_FILE = "temporary_demo_key.pem"    #Demo-key: create new one and insert here
 CERTS_DIR = "certs"       
 os.makedirs(CERTS_DIR, exist_ok=True)
 
