@@ -11,7 +11,7 @@ from cryptography.x509.oid import NameOID, ExtendedKeyUsageOID
 import os
 import datetime
 import time
-
+import json
 
 CA_CERT_FILE = "ca_cert.pem"   
 CA_KEY_FILE = "ca_key.pem"    
@@ -373,8 +373,8 @@ class MITMProxyRequestHandler(socketserver.BaseRequestHandler):
 
     def black_listed(self, host):
         blacklist = ()
-        with open("data/blacklist", "r") as f:
-            blacklist = f.readlines()
+        with open("data/blacklist.json", "r", encoding="utf-8") as f:
+            blacklist = json.load(f)
             for i in range(0,len(blacklist)):
                 blacklist[i] = blacklist[i].strip()
         print(blacklist)
