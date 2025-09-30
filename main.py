@@ -2,7 +2,7 @@ import socketserver
 import select
 import socket
 from urllib.parse import urlparse
-
+import json
 
 
 class ProxyRequestHandler(socketserver.BaseRequestHandler):
@@ -44,7 +44,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
 
                 
                 first_line = request_text.splitlines()[0]
-                print(f"Request line: {first_line}")
+                print(f"request: {first_line}")
 
                 #HTTPS handling
                 if first_line.startswith("CONNECT"):
@@ -67,7 +67,20 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                     except Exception as e:
                         print(f"HTTPS tunnel error: {e}")
                     return  
+                
+                method, uri, proto = first_line.split(" ", 2)
 
+                
+                if uri.startswith("http://"):
+                    after_host = uri[7:].split("/", 1)
+                    if len(after_host) == 2:
+                        uri = "/" + after_host[1]
+                    else:
+                        uri = "/"
+
+                new_first_line = f"{method} {uri} {proto}"
+                new_request = new_first_line + "\r\n" + "\r\n".join(headers[1:]) + "\r\n\r\n"
+                full_request = new_request.encode("utf-8") + body_part
                 
                 host = None
                 for line in request_text.splitlines():
@@ -81,9 +94,12 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                     
 
                 if host:
+                    print(host)
+                    print(full_request)
                     target_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     target_socket.connect((host, 80))
                     self.http_request(self.request, target_socket, full_request)
+                    
                 else:
                     print("No host header found")
                     return
@@ -98,7 +114,9 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
 
 
     def black_listed(self, host):
-        blacklist = ("facebook.com", "x.com", "httpbin.org")
+        with open("data/blacklist.json", "r", encoding="utf-8") as f:
+            blacklist = json.load(f)
+        #blacklist = ("facebook.com", "x.com", "httpbin.org")
         if host.startswith("http://"):
             host = urlparse(host).hostname
         else:
@@ -149,8 +167,7 @@ class ProxyRequestHandler(socketserver.BaseRequestHandler):
                 chunk = server_socket.recv(4096)
                 if not chunk:
                     break
-                response += chunk
-            client_socket.sendall(response)
+                client_socket.sendall(chunk)
 
         except Exception as e:
             print(f"HTTP request error: {e}")
