@@ -27,6 +27,12 @@ You need to install the generated certification in your browser, move the key an
 CA_CERT_FILE = "demo_cert.pem"  #Demo-cert create new one and insert here 
 CA_KEY_FILE = "demo_key.pem"    #Demo-key: create new one and insert here
 ```
+Every request and response is logged into 'mitm.log'. To disable logging change the variable 'logx' in line 24.
+
+```python
+logx = True #Enables/disables logging
+```
+
 For webfiltering: Start 'settings.py', open '127.0.0.1:42000' in your browser to edit the filtering options.
 
 Configure your browser to a proxy at 127.0.0.1:8080.
