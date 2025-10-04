@@ -13,13 +13,15 @@ import datetime
 import time
 import json
 
-CA_CERT_FILE = "temporary_demo_cert.pem"  #Demo-cert create new one and insert here 
-CA_KEY_FILE = "temporary_demo_key.pem"    #Demo-key: create new one and insert here
+CA_CERT_FILE = "demo_cert.pem"  #Demo-cert create new one and insert here 
+CA_KEY_FILE = "demo_key.pem"    #Demo-key: create new one and insert here
 CERTS_DIR = "certs"       
 os.makedirs(CERTS_DIR, exist_ok=True)
 
 HOST, PORT = "127.0.0.1", 8080
 
+global logx
+logx = True #Enables/disables logging
 
 _cert_lock = threading.Lock()
 
@@ -283,6 +285,8 @@ class MITMProxyRequestHandler(socketserver.BaseRequestHandler):
     def _proxy_bidirectional(self, sock_a, sock_b, timeout=60):
         last_activity = time.time()
         sockets = [sock_a, sock_b]
+        
+        #f = open("data/mitm.log", "a")
         while True:
             try:
                 readable, _, exceptional = select.select(sockets, [], sockets, 1.0)
@@ -308,20 +312,20 @@ class MITMProxyRequestHandler(socketserver.BaseRequestHandler):
                 except ssl.SSLWantWriteError:
                     continue
                 except Exception as e:
-                    
                     #print("recv error:", e)
                     return
 
                 if not data:
+                    
                     return
 
                 last_activity = now
-
-                
+                self.handle_data(data)
+                #f.write(str(datetime.datetime.now())+data.decode("utf-8"))
                 dest = sock_b if s is sock_a else sock_a
                 
-                #with open("data/mitm.log", "a") as f: #logging everything
-                    #f.write(data.decode("utf-8"))
+                
+                
                 sent = False
                 while not sent:
                     try:
@@ -333,7 +337,17 @@ class MITMProxyRequestHandler(socketserver.BaseRequestHandler):
                         
                         #print("send error:", e)
                         return
+            
 
+
+    def handle_data(self, data): #logging
+        if logx == True:
+            with open("data/mitm.log", "a")as f:
+                try:
+                    f.write(str(datetime.datetime.now())+f"\n" +data.decode("UTF-8"))
+                except:
+                    print("decode error")    
+    
     def handle_http_request(self, full_request_bytes):
         try:
             
