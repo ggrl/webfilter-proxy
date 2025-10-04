@@ -1,9 +1,9 @@
-from flask import Flask, request, redirect, url_for, render_template_string, flash
+from flask import Flask, request, redirect, url_for, render_template, flash
 import json
 import os
 
 app = Flask(__name__)
-app.secret_key = "dev-secret"  # replace with a secure key if exposing publicly
+app.secret_key = "demo-key" #change key for security purposes
 
 BLACKLIST_FILE = "data/blacklist.json"
 
@@ -17,60 +17,11 @@ def save_blacklist(lst):
     with open(BLACKLIST_FILE, "w", encoding="utf-8") as f:
         json.dump(lst, f, indent=2)
 
-# Simple inline template so app is only one file
-TEMPLATE = """
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title>proxy settings</title>
-<style>
-body { font-family: system-ui, Arial; max-width: 800px; margin: 2rem; }
-input[type=text]{ width: 60%; padding: 0.4rem }
-button{ padding: 0.4rem 0.6rem }
-li { margin: 0.4rem 0 }
-.small { color: #666; font-size:0.9rem }
-</style>
-</head>
-<body>
-  <h1>proxy settings</h1>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-      {% for m in messages %}
-        <li style="color:green">{{ m }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-
-  <form method="post" action="{{ url_for('add') }}">
-    <input name="item" placeholder="enter website..." required>
-    <button type="submit">Add</button>
-  </form>
-
-  <h2>Current blacklist ({{ blacklist|length }})</h2>
-  <ul>
-  {% for item in blacklist %}
-    <li>
-      <strong>{{ item }}</strong>
-      <form method="post" action="{{ url_for('remove') }}" style="display:inline">
-        <input type="hidden" name="item" value="{{ item }}">
-        <button type="submit">Remove</button>
-      </form>
-    </li>
-  {% else %}
-    <li class="small">(empty)</li>
-  {% endfor %}
-  </ul>
-
- 
-</body>
-</html>
-"""
 
 @app.route("/")
 def index():
     bl = load_blacklist()
-    return render_template_string(TEMPLATE, blacklist=bl)
+    return render_template("settings.html", blacklist=bl)
 
 @app.route("/add", methods=["POST"])
 def add():
@@ -100,5 +51,4 @@ def remove():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-    # Only listen on localhost by default — safer during development
     app.run(host="127.0.0.1", port=42000, debug=True)
