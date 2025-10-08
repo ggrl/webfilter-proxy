@@ -1,0 +1,275 @@
+2025-10-06 09:40:47.703268
+GET /my/ HTTP/1.1
+Host: learn.cybersteps.de
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Referer: https://learn.cybersteps.de/login/index.php
+Connection: keep-alive
+Cookie: MoodleSession=a8566b271a71e75873f7c4a3202afa28; MOODLEID1_=%25B1%25F1%25C3C%25A5%25C6%253D%25DFa%25A7R%25C5B%2527%2525
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+2025-10-06 09:40:47.951403
+POST /lib/ajax/service.php?sesskey=u0QMtcfKr9&info=block_recentlyaccesseditems_get_recent_items HTTP/1.1
+Host: learn.cybersteps.de
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 92
+Origin: https://learn.cybersteps.de
+Connection: keep-alive
+Referer: https://learn.cybersteps.de/my/
+Cookie: MoodleSession=a8566b271a71e75873f7c4a3202afa28; MOODLEID1_=%25B1%25F1%25C3C%25A5%25C6%253D%25DFa%25A7R%25C5B%2527%2525
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+
+[{"index":0,"methodname":"block_recentlyaccesseditems_get_recent_items","args":{"limit":9}}]2025-10-06 09:40:48.179548
+POST /lib/ajax/service.php?sesskey=u0QMtcfKr9&info=core_course_get_enrolled_courses_by_timeline_classification HTTP/1.1
+Host: learn.cybersteps.de
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 306
+Origin: https://learn.cybersteps.de
+Connection: keep-alive
+Referer: https://learn.cybersteps.de/my/
+Cookie: MoodleSession=a8566b271a71e75873f7c4a3202afa28; MOODLEID1_=%25B1%25F1%25C3C%25A5%25C6%253D%25DFa%25A7R%25C5B%2527%2525
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+
+[{"index":0,"methodname":"core_course_get_enrolled_courses_by_timeline_classification","args":{"offset":0,"limit":0,"classification":"all","sort":"fullname","customfieldname":"","customfieldvalue":"","requiredfields":["id","fullname","shortname","showcoursecategory","showshortname","visible","enddate"]}}]2025-10-06 09:40:48.716823
+GET /complete/search?client=firefox&channel=ftr&q= HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: */*
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+
+2025-10-06 09:40:48.793515
+1
+
+2025-10-06 09:40:48.793664
+0
+
+2025-10-06 09:40:50.019627
+GET /complete/search?client=firefox&channel=fen&q=fa HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: */*
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+
+2025-10-06 09:40:50.072316
+1
+
+2025-10-06 09:40:50.072620
+0
+
+2025-10-06 09:40:50.146546
+GET /complete/search?client=firefox&channel=fen&q=fac HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: */*
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+
+2025-10-06 09:40:50.228657
+1
+
+2025-10-06 09:40:50.229036
+0
+
+2025-10-06 09:40:50.337264
+GET /complete/search?client=firefox&channel=fen&q=face HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: */*
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+
+2025-10-06 09:40:50.392891
+1
+
+2025-10-06 09:40:50.393257
+0
+
+2025-10-06 09:41:29.084625
+GET /main-workspace/newtab-wallpapers-v2/55b678ff-15c3-49d5-bdbc-40f8413cfb8a.avif HTTP/1.1
+Host: firefox-settings-attachments.cdn.mozilla.net
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Sec-Fetch-Dest: image
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: cross-site
+If-Modified-Since: Mon, 07 Apr 2025 17:04:28 GMT
+If-None-Match: "4e7772909b4f3d71bffbaa188999f0b6"
+Priority: u=4, i
+
+2025-10-06 09:41:29.084670
+GET /main-workspace/newtab-wallpapers-v2/18c7861f-0c9d-48d4-a98c-fb8999e331bd.avif HTTP/1.1
+Host: firefox-settings-attachments.cdn.mozilla.net
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Sec-Fetch-Dest: image
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: cross-site
+If-Modified-Since: Fri, 14 Mar 2025 20:44:06 GMT
+If-None-Match: "791eab0e194b4a3efc195f12ebb440f7"
+Priority: u=4, i
+
+2025-10-06 09:41:29.108220
+HTTP/1.1 304 Not Modified
+Connection: keep-alive
+Date: Mon, 06 Oct 2025 07:41:29 GMT
+Via: 1.1 varnish
+Cache-Control: public, max-age=3600
+ETag: "4e7772909b4f3d71bffbaa188999f0b6"
+Expires: Tue, 16 Sep 2025 00:56:30 GMT
+Age: 2306
+X-Served-By: cache-fra-eddf8230098-FRA
+X-Cache: HIT
+X-Cache-Hits: 4739
+X-Timer: S1759736489.115032,VS0,VE0
+
+2025-10-06 09:41:29.108341
+HTTP/1.1 304 Not Modified
+Connection: keep-alive
+Date: Mon, 06 Oct 2025 07:41:29 GMT
+Via: 1.1 varnish
+Cache-Control: public, max-age=3600
+ETag: "791eab0e194b4a3efc195f12ebb440f7"
+Expires: Wed, 01 Oct 2025 21:40:51 GMT
+Age: 3535
+X-Served-By: cache-fra-eddf8230168-FRA
+X-Cache: HIT
+X-Cache-Hits: 6702
+X-Timer: S1759736489.115200,VS0,VE0
+
+2025-10-06 09:41:30.069955
+GET /main-workspace/newtab-wallpapers-v2/e94b1e49-c518-40d6-98e3-dffab6cc370d.avif HTTP/1.1
+Host: firefox-settings-attachments.cdn.mozilla.net
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Sec-Fetch-Dest: image
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: cross-site
+If-Modified-Since: Mon, 17 Jun 2024 15:19:13 GMT
+If-None-Match: "ecb67fe4585a5714e4df200ceb5481b8"
+Priority: u=4, i
+
+2025-10-06 09:41:30.094542
+HTTP/1.1 304 Not Modified
+Connection: keep-alive
+Date: Mon, 06 Oct 2025 07:41:30 GMT
+Via: 1.1 varnish
+Cache-Control: public, max-age=3600
+ETag: "ecb67fe4585a5714e4df200ceb5481b8"
+Expires: Fri, 03 Oct 2025 00:49:12 GMT
+Age: 3031
+X-Served-By: cache-fra-eddf8230133-FRA
+X-Cache: HIT
+X-Cache-Hits: 5778
+X-Timer: S1759736490.101139,VS0,VE0
+
+2025-10-06 09:41:30.246926
+GET /my/ HTTP/1.1
+Host: learn.cybersteps.de
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Cookie: MoodleSession=a8566b271a71e75873f7c4a3202afa28; MOODLEID1_=%25B1%25F1%25C3C%25A5%25C6%253D%25DFa%25A7R%25C5B%2527%2525
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+2025-10-06 09:41:30.594886
+POST /lib/ajax/service.php?sesskey=u0QMtcfKr9&info=block_recentlyaccesseditems_get_recent_items HTTP/1.1
+Host: learn.cybersteps.de
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 92
+Origin: https://learn.cybersteps.de
+Connection: keep-alive
+Referer: https://learn.cybersteps.de/my/
+Cookie: MoodleSession=a8566b271a71e75873f7c4a3202afa28; MOODLEID1_=%25B1%25F1%25C3C%25A5%25C6%253D%25DFa%25A7R%25C5B%2527%2525
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+
+[{"index":0,"methodname":"block_recentlyaccesseditems_get_recent_items","args":{"limit":9}}]2025-10-06 09:41:30.647285
+POST /lib/ajax/service.php?sesskey=u0QMtcfKr9&info=core_course_get_enrolled_courses_by_timeline_classification HTTP/1.1
+Host: learn.cybersteps.de
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 306
+Origin: https://learn.cybersteps.de
+Connection: keep-alive
+Referer: https://learn.cybersteps.de/my/
+Cookie: MoodleSession=a8566b271a71e75873f7c4a3202afa28; MOODLEID1_=%25B1%25F1%25C3C%25A5%25C6%253D%25DFa%25A7R%25C5B%2527%2525
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+
+[{"index":0,"methodname":"core_course_get_enrolled_courses_by_timeline_classification","args":{"offset":0,"limit":0,"classification":"all","sort":"fullname","customfieldname":"","customfieldvalue":"","requiredfields":["id","fullname","shortname","showcoursecategory","showshortname","visible","enddate"]}}]2025-10-06 09:42:14.489177
+GET /ohttp-configs HTTP/1.1
+Host: prod.ohttp-gateway.prod.webservices.mozgcp.net
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0
+Accept: */*
+Accept-Language: de,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: none
+Priority: u=4
+Pragma: no-cache
+Cache-Control: no-cache
+
+2025-10-06 09:42:15.036360
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 623
+Content-Type: message/ohttp-res
+Cache-Control: private, no-store
+Date: Mon, 06 Oct 2025 07:42:15 GMT
+
